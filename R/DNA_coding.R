@@ -1,9 +1,9 @@
 ###################### this function is for the DNA to inter
 #' Using onehot coding to transform DNA sequence into a data matrix containing only 0，1
-#' 
+#'
 #' The input argument is a short DNA sequence
-#' Output is a data matrix 
-#' 
+#' Output is a data matrix
+#'
 #' @param seq a short DNA sequence
 DNA_To_inter_onehot <- function(seq) {
     dir <- matrix(c(c(1, 0, 0, 0), c(0, 1, 0, 0), c(0, 0, 1, 0), c(0, 0, 0, 1)), nrow = 4)
@@ -21,9 +21,9 @@ DNA_To_inter_onehot <- function(seq) {
 
 ###################### this function is for the Dinucleotide binary encoding to inter
 #'  Encoding 2mer to transform a short DNA sequence into a data matrix containing only 0，1
-#' 
+#'
 #' The input argument is a short DNA sequence
-#' Output is a data matrix 
+#' Output is a data matrix
 #'  @param seq a short DNA sequence
 DNA_To_inter_2mer <- function(seq) {
     dir <- c(0, 1, 2, 3)
@@ -58,9 +58,9 @@ DNA_To_inter_2mer <- function(seq) {
 #' @return A matrix contain 0,1
 #' @export
 #'
-#' @examples 
+#' @examples
 #' center_chr_loci<-data.frame(chr=c("chr1","chr2"),Position=c(100000,200000))
-#' get_DNA_inter(center_chr_loci, 100, "data/hg38/", 1) 
+#' get_DNA_inter(center_chr_loci, 100, "data/hg38/", 1)
 get_DNA_inter <- function(center_chr_loci, flank_size = 100, fre_gen_dir = "data/hg38/", OnehotOr2mer = 1) {
     library("Biostrings")
     library("rlist")
@@ -73,7 +73,7 @@ get_DNA_inter <- function(center_chr_loci, flank_size = 100, fre_gen_dir = "data
                 chr <- as.character(center_chr_loci[j, 1])
                 s <- readDNAStringSet(paste0(fre_gen_dir, chr, ".fa"))
             }
-            Seq[j] <- toString(subseq(s, start = as.numeric(as.character(center_chr_loci[j, 2])) - flank_size, end = as.numeric(as.character(center_chr_loci[j, 
+            Seq[j] <- toString(subseq(s, start = as.numeric(as.character(center_chr_loci[j, 2])) - flank_size, end = as.numeric(as.character(center_chr_loci[j,
                 2])) + flank_size))
             DNAtens <- list.append(DNAtens, DNA_To_inter_onehot (Seq[j]))
             # cat ('Has get ',j, ' sequence \n');
@@ -82,13 +82,13 @@ get_DNA_inter <- function(center_chr_loci, flank_size = 100, fre_gen_dir = "data
             }
         }
     } else {
-        if (OnehotOr2mer == 2) 
+        if (OnehotOr2mer == 2)
             for (j in 1:nrow(center_chr_loci)) {
                 if (center_chr_loci[j, 1] != chr) {
                   chr <- as.character(center_chr_loci[j, 1])
                   s <- readDNAStringSet(paste0(fre_gen_dir, chr, ".fa"))
                 }
-                Seq[j] <- toString(subseq(s, start = as.numeric(as.character(center_chr_loci[j, 2])) - flank_size, end = as.numeric(as.character(center_chr_loci[j, 
+                Seq[j] <- toString(subseq(s, start = as.numeric(as.character(center_chr_loci[j, 2])) - flank_size, end = as.numeric(as.character(center_chr_loci[j,
                   2])) + flank_size))
                 DNAtens <- list.append(DNAtens, DNA_To_inter_2mer(Seq[j]))
                 # cat ('Has get ',j, ' sequence \n');
@@ -110,9 +110,9 @@ get_DNA_inter <- function(center_chr_loci, flank_size = 100, fre_gen_dir = "data
 #' @return A matrix contain 0,1
 #' @export
 #'
-#' @examples 
+#' @examples
 #' center_chr_loci<-data.frame(chr=c("chr1","chr2"),Position=c(100000,200000))
-#' get_DNA_inter(center_chr_loci, 100, "data/hg38/", 1) 
+#' get_DNA_inter(center_chr_loci, 100, "data/hg38/", 1)
 get_DNA_inter_mutiple_core <- function(center_chr_loci, flank_size = 100, dir = "data/hg38/", OnehotOr2mer = 1) {
 
   library("rlist")
@@ -126,7 +126,7 @@ get_DNA_inter_mutiple_core <- function(center_chr_loci, flank_size = 100, dir = 
     registerDoParallel(cl)
     DNAtens <- foreach(j = c(1:nrow(center_chr_loci))) %dopar% {
       library("Biostrings")
-      source("Script/DNA_coding.R") 
+      source("Script/DNA_coding.R")
       if (center_chr_loci[j, 1] != chr) {
         chr <- as.character(center_chr_loci[j, 1])
         s <- readDNAStringSet(paste0(dir, chr, ".fa"))
@@ -137,12 +137,12 @@ get_DNA_inter_mutiple_core <- function(center_chr_loci, flank_size = 100, dir = 
     stopCluster(cl)
   }
  else {
-    if (OnehotOr2mer == 2) 
+    if (OnehotOr2mer == 2)
        cl <- makeCluster(8)
        registerDoParallel(cl)
        DNAtens <- foreach(j = c(1:nrow(center_chr_loci))) %dopar% {
         library("Biostrings")
-        source("Script/DNA_coding.R") 
+        source("R/DNA_coding.R")
         if (center_chr_loci[j, 1] != chr) {
           chr <- as.character(center_chr_loci[j, 1])
           s <- readDNAStringSet(paste0(dir, chr, ".fa"))
