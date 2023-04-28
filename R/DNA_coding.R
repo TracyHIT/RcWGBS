@@ -126,7 +126,7 @@ get_DNA_inter_mutiple_core <- function(center_chr_loci, flank_size = 100, dir = 
     registerDoParallel(cl)
     DNAtens <- foreach(j = c(1:nrow(center_chr_loci))) %dopar% {
       library("Biostrings")
-      source("Script/DNA_coding.R")
+      source("R/DNA_coding.R")
       if (center_chr_loci[j, 1] != chr) {
         chr <- as.character(center_chr_loci[j, 1])
         s <- readDNAStringSet(paste0(dir, chr, ".fa"))
