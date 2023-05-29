@@ -173,12 +173,7 @@ model_2mer_methyl_train_single_cell<- function(train_data = "data/Train_Test_Dat
   model %>% save_model_hdf5(save_model)
   print(paste0("model:F1:",F1," TP:",TP," FP:",FP,"  FN:",FN," TN:",TN," Precision:",P," Recall:",R))
 }
-model_2mer_methyl_train_single_cell(train_data = "data/Train_Test_Data/HepG2_2_hg38.train.Rdata",
-                                    figure_history_prefix = "pre_model2_2mer_methyl_GM12878_SC",flank_size=50,
-                                    save_model = "model_2mer_methyl_HepG2_2.h5",epochs_Num=20,
-                                    batch_size_Num = 512,
-                                    validation_split_Num = 0.2,
-                                    poolingsize = 2)
+
 
 #' Prediction of low coverage sites with trained models.
 #'
